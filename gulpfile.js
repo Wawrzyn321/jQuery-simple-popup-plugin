@@ -3,6 +3,8 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify-es').default;
 var cleanCSS = require('gulp-clean-css');
 var jshint = require('gulp-jshint')
+var babel = require('gulp-babel')
+var qunit = require('gulp-qunit');
 
 function minifyJS() {
     return gulp.src('src/popup.js', { sourcemaps: true })
@@ -12,7 +14,8 @@ function minifyJS() {
 
 function lint() {
     return gulp.src('src/popup.js')
-        .pipe(jshint()).pipe(jshint.reporter('default'));
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 }
 
 function moveJS() {
@@ -57,6 +60,22 @@ function build(done) {
     done();
 }
 
+//we need to transpile our file, as phantomJS (used by QUnit) doesn't recognize es6 syntax
+function transpileJSForTesting() {
+    return gulp.src('./src/popup.js')
+            .pipe(babel({
+                presets: ['@babel/env']
+            }))
+            .pipe(rename('popup-transpiled.js'))
+            .pipe(gulp.dest('./tests'));
+}
+
+function test() {
+    return gulp.src('./tests/test-runner.html')
+        .pipe(qunit());
+}
+
 gulp.task('lint', lint);
 gulp.task('build', build);
 gulp.task('default', watch);
+gulp.task('test', gulp.series(transpileJSForTesting, test));

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Popup plugin tests</title>
+  <link rel="stylesheet" href="./../src/popup-theme.css">
+  <link rel="stylesheet" href="./../node_modules/qunit/qunit/qunit.css">
+</head>
+
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script src="./../node_modules/qunit/qunit/qunit.js"></script>
+  <script src="./../lib/jquery.js"></script>
+  <script src="./popup-transpiled.js"></script>
+  <script src="PluginRegistrationTests.js"></script>
+  <script src="ChainabilityTests.js"></script>
+  <script src="AddingPopupDataTests.js"></script>
+  <div class='popup-popup' id="popup">
+    Put popup content here.<br/>
+  </div>
+  <div class='popup-popup' id="dismissible-popup">
+    Put popup content here.<br/>
+    <button class="popup-close">Close</button>
+  </div>
+</body>
+
+</html>

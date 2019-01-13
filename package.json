@@ -3,12 +3,23 @@
   "version": "1.0.0",
   "description": "Simple popup plugin for jQuery",
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
     "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.0.0",
     "gulp-jshint": "^2.1.0",
+    "gulp-qunit": "^2.0.2",
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.1",
     "gulp-uglify-es": "^1.0.4",
-    "jshint": "^2.9.7"
+    "jshint": "^2.9.7",
+    "qunit": "^2.9.1"
+  },
+  "scripts": {
+    "test": "gulp test",
+    "build": "gulp build"
   }
 }
