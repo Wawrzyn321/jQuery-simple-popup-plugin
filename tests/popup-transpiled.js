@@ -165,10 +165,10 @@
 
     if (position === 'absolute') {
       /*on-item*/
-      var $invokingElement = $popup[0].popupData.$lastInvoker;
+      var $invokingElement = $popup[0].popupData.$lastInvoker; //check if invoker has been set
 
-      if (!$invokingElement) {
-        console.warn('getVerticalPosition: $lastInvoker is null!');
+      if (!$invokingElement || $invokingElement[0] === undefined) {
+        console.warn('getVerticalPosition: $lastInvoker is not set!');
         return {
           position: position,
           top: 0
@@ -178,8 +178,8 @@
 
       var invokerBBox = $invokingElement[0].getBoundingClientRect();
       var invokerHeight = invokerBBox.height;
-      var invokerWidth = invokerBBox.y;
-      var top = scrollAmount + invokerWidth + invokerHeight / 2 - popupHeight / 2;
+      var invokerY = invokerBBox.y;
+      var top = scrollAmount + invokerY + invokerHeight / 2 - popupHeight / 2;
       return {
         position: position,
         top: top
@@ -209,11 +209,15 @@
     var side = $popup[0].popupData.popupSide;
 
     if (side == 'left') {
-      return 0;
+      return {
+        left: 0,
+        right: 'auto'
+      };
     } else {
-      var viewportWidth = $(window).width();
-      var popupWidth = $popup.outerWidth();
-      return viewportWidth - popupWidth;
+      return {
+        left: 'auto',
+        right: 0
+      };
     }
   } //get position, left and top and assign them
 
@@ -223,11 +227,15 @@
         position = _getVerticalPosition.position,
         top = _getVerticalPosition.top;
 
-    var left = getHorizontalPosition($popup);
+    var _getHorizontalPositio = getHorizontalPosition($popup),
+        left = _getHorizontalPositio.left,
+        right = _getHorizontalPositio.right;
+
     $popup.css({
       'position': position,
       'top': top,
-      'left': left
+      'left': left,
+      'right': right
     });
   }
 
@@ -241,9 +249,7 @@
 
     $popup[0].showPopup = function (invoker) {
       $popup.addClass('popup-visible');
-      $.extend($popup[0].popupData, {
-        $lastInvoker: $(invoker)
-      });
+      $popup[0].popupData.$lastInvoker = invoker.jquery ? invoker : $(invoker);
       updatePopupPosition($popup);
       animateEnter($popup);
     }; //public function - hide popup
@@ -267,26 +273,6 @@
   jQuery.fn.popup = function (options) {
     this.each(function () {
       initPopup($(this), options);
-    });
-    return this; //return for chaining
-  }; //shorthand for $(popup)[0].showPopup
-
-
-  jQuery.fn.showPopup = function (invoker) {
-    this.each(function () {
-      if ($(this).is('.popup-popup')) {
-        this.showPopup(invoker);
-      }
-    });
-    return this; //return for chaining
-  }; //shorthand for $(popup)[0].hidePopup
-
-
-  jQuery.fn.hidePopup = function () {
-    this.each(function () {
-      if ($(this).is('.popup-popup')) {
-        this.hidePopup();
-      }
     });
     return this; //return for chaining
   };

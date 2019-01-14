@@ -174,16 +174,18 @@
             /*on-item*/
 
             const $invokingElement = $popup[0].popupData.$lastInvoker;
-            if (!$invokingElement) {
-                console.warn('getVerticalPosition: $lastInvoker is null!');
+
+            //check if invoker has been set
+            if (!$invokingElement || $invokingElement[0] === undefined) {
+                console.warn('getVerticalPosition: $lastInvoker is not set!');
                 return { position, top: 0 };
             }
             //used for centering
             const invokerBBox = $invokingElement[0].getBoundingClientRect();
             const invokerHeight = invokerBBox.height;
-            const invokerWidth = invokerBBox.y;
+            const invokerY = invokerBBox.y;
 
-            const top = scrollAmount + invokerWidth + invokerHeight / 2 - popupHeight / 2;
+            const top = scrollAmount + invokerY + invokerHeight / 2 - popupHeight / 2;
             return { position, top };
         }
         else {
@@ -203,24 +205,23 @@
         const side = $popup[0].popupData.popupSide;
 
         if (side == 'left') {
-            return 0;
+            return {left: 0, right: 'auto'};
         }
         else {
-            const viewportWidth = $(window).width();
-            const popupWidth = $popup.outerWidth();
-            return viewportWidth - popupWidth;
+            return {left: 'auto', right: 0};
         }
     }
 
     //get position, left and top and assign them
     function updatePopupPosition($popup) {
         const { position, top } = getVerticalPosition($popup);
-        const left = getHorizontalPosition($popup);
+        const { left, right} = getHorizontalPosition($popup);
 
         $popup.css({
             'position': position,
             'top': top,
-            'left': left
+            'left': left,
+            'right': right
         });
     }
 
@@ -238,7 +239,7 @@
         //public function - show popup
         $popup[0].showPopup = function(invoker) {
             $popup.addClass('popup-visible');
-            $.extend($popup[0].popupData, {$lastInvoker: $(invoker)});
+            $popup[0].popupData.$lastInvoker = invoker.jquery ? invoker : $(invoker);
             updatePopupPosition($popup);
             animateEnter($popup);
         };
@@ -267,26 +268,6 @@
         return this; //return for chaining
     };
     
-    //shorthand for $(popup)[0].showPopup
-    jQuery.fn.showPopup = function (invoker) {
-        this.each(function() {
-            if ($(this).is('.popup-popup')) {
-                this.showPopup(invoker);
-            }
-        });
-        return this; //return for chaining
-    };
-
-    //shorthand for $(popup)[0].hidePopup
-    jQuery.fn.hidePopup = function () {
-        this.each(function() {
-            if ($(this).is('.popup-popup')) {
-                this.hidePopup();
-            }
-        });
-        return this; //return for chaining
-    };
-
     $(function(){
         initialize();
     });

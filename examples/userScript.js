@@ -1,11 +1,11 @@
 $('.popup-definition').on('mouseenter', function() {
     const popupId = $(this).data('popupTarget');
-    $(popupId).showPopup(this);
+    $(popupId)[0].showPopup($(this));
 }).on('mouseleave', function() {
     const popupId = $(this).data('popupTarget');
-    $(popupId).hidePopup();
+    $(popupId)[0].hidePopup();
 });
 
-$('.popup-popup').popup( {popupAnimation: 'fade'} );
+$('.popup-popup').popup( {popupAnimation: 'fade', popupSide: 'right'} );
 
 //const placement = getPlacementData(options);

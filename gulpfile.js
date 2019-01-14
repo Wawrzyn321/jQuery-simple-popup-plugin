@@ -5,6 +5,7 @@ var cleanCSS = require('gulp-clean-css');
 var jshint = require('gulp-jshint')
 var babel = require('gulp-babel')
 var qunit = require('gulp-qunit');
+var fs = require('fs');
 
 function minifyJS() {
     return gulp.src('src/popup.js', { sourcemaps: true })
@@ -74,8 +75,9 @@ function transpileJSForTesting() {
 }
 
 function test() {
+    const testConfig = JSON.parse(fs.readFileSync('tests/test-config.json'));
     return gulp.src('./tests/test-runner.html')
-        .pipe(qunit());
+        .pipe(qunit(testConfig));
 }
 
 gulp.task('lint', lint);
