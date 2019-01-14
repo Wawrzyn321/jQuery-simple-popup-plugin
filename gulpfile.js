@@ -9,7 +9,11 @@ var qunit = require('gulp-qunit');
 function minifyJS() {
     return gulp.src('src/popup.js', { sourcemaps: true })
         .pipe(uglify())
-        .pipe(gulp.dest('dist/popup.min.js'))
+        .pipe(rename({
+            basename: 'popup',
+            suffix: '.min'
+        }))
+        .pipe(gulp.dest('dist'))
 }
 
 function lint() {
@@ -20,7 +24,7 @@ function lint() {
 
 function moveJS() {
     return gulp.src('src/popup.js')
-        .pipe(gulp.dest('popup.min.js'))
+        .pipe(gulp.dest('dist'))
 }
 
 function watchJS() {
@@ -53,11 +57,10 @@ function watch() {
 
 
 function build(done) {
-    gulp.parallel(
+    return gulp.parallel(
         gulp.series(minifyJS, moveJS),
         gulp.series(minifyCSS, moveCSS)
-    );
-    done();
+    )(done);
 }
 
 //we need to transpile our file, as phantomJS (used by QUnit) doesn't recognize es6 syntax
