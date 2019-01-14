@@ -62,4 +62,4 @@ typings/
 
 
 dist/
-src/popup.js
+tests/popup-transpiled.js

@@ -27,12 +27,18 @@
 
     //global initialize
     function initialize() {
+
         //on resize, update each active popup position
         $(window).on('resize', function () {
             $('.popup-visible').each(function () {
                 const $popup = $(this);
                 updatePopupPosition($popup);
             });
+        });
+
+        //add global listener for popup invokers
+        $(document).on('click', 'popup-link', function(e) {
+            console.log(e.target);
         });
 
         Number.isNaN = Number.isNaN || isNaN;
@@ -66,9 +72,8 @@
     }
 
     //add popup data to DOM popup element
-    function assignPopupData($popup, $invokingElement, options) {
+    function assignPopupData($popup, options) {
         const placement = getPlacementData(options);
-        const lastInvoker = { lastInvoker: $invokingElement };
 
         const availableValues = jQuery.popup.popupValues;
 
@@ -93,7 +98,7 @@
             }
         }
 
-        $popup[0].popupData = $.extend(options, placement, lastInvoker);
+        $popup[0].popupData = $.extend(options, placement);
     }
 
     //initialize single popup events
@@ -158,7 +163,6 @@
 
     //return a pair of CSS position value (fixed or absolute) and top coordinate
     function getVerticalPosition ($popup) {
-        const $invokingElement = $popup[0].popupData.lastInvoker;
         const position = $popup[0].popupData.position;
         const placementMode = $popup[0].popupData.popupPlacement;
 
@@ -169,6 +173,11 @@
         if (position === 'absolute') {
             /*on-item*/
 
+            const $invokingElement = $popup[0].popupData.$lastInvoker;
+            if (!$invokingElement) {
+                console.warn('getVerticalPosition: $lastInvoker is null!');
+                return { position, top: 0 };
+            }
             //used for centering
             const invokerBBox = $invokingElement[0].getBoundingClientRect();
             const invokerHeight = invokerBBox.height;
@@ -215,28 +224,21 @@
         });
     }
 
-    function initPopup($invokingElement, options) {
-        
+    function initPopup($popup, options) {
         //merge options and add defaults
-        options = $.extend({}, jQuery.popup.popupDefaults, $invokingElement.data(), options);
-
-        //find referenced popup
-        const $popup = $(options.popupTarget);
-        if ($popup.length === 0) {
-            console.error(`popup: Could not find "${options.popupTarget}"`);
-            return;
-        }
+        options = $.extend({}, jQuery.popup.popupDefaults, $popup.data(), options);
 
         //bind popup data to popup
-        assignPopupData($popup, $invokingElement, options);
+        assignPopupData($popup, options);
 
         //initialize events for popup
         initializeEvents($popup);
 
 
         //public function - show popup
-        $popup[0].showPopup = function() {
+        $popup[0].showPopup = function(invoker) {
             $popup.addClass('popup-visible');
+            $.extend($popup[0].popupData, {$lastInvoker: $(invoker)});
             updatePopupPosition($popup);
             animateEnter($popup);
         };
@@ -260,8 +262,27 @@
 
     jQuery.fn.popup = function (options) {
         this.each(function() {
-            const $invokingElement =  $(this);
-            initPopup($invokingElement, options);
+            initPopup($(this), options);
+        });
+        return this; //return for chaining
+    };
+    
+    //shorthand for $(popup)[0].showPopup
+    jQuery.fn.showPopup = function (invoker) {
+        this.each(function() {
+            if ($(this).is('.popup-popup')) {
+                this.showPopup(invoker);
+            }
+        });
+        return this; //return for chaining
+    };
+
+    //shorthand for $(popup)[0].hidePopup
+    jQuery.fn.hidePopup = function () {
+        this.each(function() {
+            if ($(this).is('.popup-popup')) {
+                this.hidePopup();
+            }
         });
         return this; //return for chaining
     };
