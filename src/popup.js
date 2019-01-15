@@ -244,6 +244,11 @@
                 }
             });
         };
+        
+        //public function - check if popup is active
+        $popup[0].isShown = function() {
+            return $popup.hasClass('popup-visible');
+        };
     }
 
     jQuery.fn.popup = function (options) {

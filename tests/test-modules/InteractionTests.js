@@ -37,7 +37,8 @@ QUnit.module('Interaction tests', function() {
 
         invoker.trigger('mouseover');
         
-        assert.ok(popup.hasClass('popup-visible'), 'Popup should be active and have "popup-visible" class');
+        var a = popup[0].isShown();
+        assert.ok(a, 'Popup should be active and return true from isActive function');
     });
     
     QUnit.test('Closing button on mouse leave', function(assert) {
@@ -50,7 +51,7 @@ QUnit.module('Interaction tests', function() {
 
         invoker.trigger('mouseleave');
 
-        assert.notOk(popup.hasClass('popup-visible'), 'Popup shouldn\'t have "popup-visible" class');
+        assert.notOk(popup[0].isShown(), 'Popup\'s isActive should return false on inactive popup');
     });
 
 });
