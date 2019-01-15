@@ -3,9 +3,16 @@ $('.popup-definition').on('mouseenter', function() {
     $(popupId)[0].showPopup($(this));
 }).on('mouseleave', function() {
     const popupId = $(this).data('popupTarget');
-    $(popupId)[0].hidePopup();
+    $(popupId)[0].closePopup();
 });
 
-$('.popup-popup').popup( {popupAnimation: 'fade', popupSide: 'right'} );
+$('#first-popup').popup();
 
-//const placement = getPlacementData(options);
+$('#second-popup').popup({
+    popupSide: 'left',
+    popupPlacement: 'fixed-bottom'
+});
+
+$('#popup-button').on('click', function() {
+    $('#second-popup')[0].showPopup(this);
+});

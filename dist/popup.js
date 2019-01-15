@@ -1,4 +1,3 @@
-
 /*jshint esversion: 6 */
 
 (function($, window, document) {
@@ -18,7 +17,6 @@
         //default values
         popupDefaults: {
             popupSide: 'right',
-            popupOnEnded: $.noop,
             popupPlacement: 'absolute-on-item',
             popupAnimation: 'slide',
             popupAnimationSpeed: '_default'
@@ -36,16 +34,18 @@
             });
         });
 
-        //add global listener for popup invokers
-        $(document).on('click', 'popup-link', function(e) {
-            console.log(e.target);
-        });
-
         Number.isNaN = Number.isNaN || isNaN;
     }
 
     //extract placementMode and CSS position from popupPlacement variable
     function getPlacementData(options) {
+
+        const availableValues = jQuery.popup.popupValues;
+
+        if (availableValues.placements.indexOf(options.popupPlacement) === -1) {
+            throw new Error('popup: unrecognized placement: ' + options.popupPlacement);
+        }
+
         switch (options.popupPlacement) {
             case 'absolute-on-item':
                 return {
@@ -62,12 +62,6 @@
                     position: 'fixed',
                     placementMode: 'middle'
                 };
-            default:
-                console.warn(`popup: unrecognized placement: "${options.popupPlacement}", defaulting to "absolute-on-item"`);
-                return {
-                    position: 'absolute',
-                    placementMode: 'on-item'
-                };
         }
     }
 
@@ -79,22 +73,19 @@
 
         //check side
         if (availableValues.sides.indexOf(options.popupSide) === -1) {
-            console.warn(`popup: unrecognized side: "${options.popupSide}", defaulting to "${jQuery.popupDefaults.popupSide}"`);
-            options.popupSide = jQuery.popupDefaults.popupSide;
+            throw new Error('popup: unrecognized popup side: '+ options.popupSide);
         }
 
         //check animation type
         if (availableValues.animations.indexOf(options.popupAnimation) === -1) {
-            console.warn(`popup: unrecognized animation type: "${options.popupAnimation}", defaulting to "${jQuery.popupDefaults.popupAnimation}"`);
-            options.popupAnimation = jQuery.popupDefaults.popupAnimation;
+            throw new Error('popup: unrecognized popup animation type: '+ options.popupAnimation);
         }
         
         //check animation speed
         const animationSpeed = parseFloat(options.popupAnimationSpeed);
         if (Number.isNaN(animationSpeed)) {
             if (availableValues.animationSpeeds[options.popupAnimationSpeed] === undefined) {
-                console.warn(`popup: unrecognized animation speed: "${options.popupAnimationSpeed}", defaulting to "${jQuery.popupDefaults.popupAnimationSpeed}"`);
-                options.popupAnimation = jQuery.popupDefaults.popupAnimationSpeed;
+                throw new Error('popup: unrecognized popup animation speed: '+ options.popupAnimationSpeed);
             }
         }
 
@@ -104,7 +95,7 @@
     //initialize single popup events
     function initializeEvents($popup) {
         $popup.on('click', '.popup-close', function (e) {
-            $popup[0].hidePopup();
+            $popup[0].closePopup();
         });
     }
 
@@ -115,7 +106,7 @@
         const animationSpeed = $popup[0].popupData.popupAnimationSpeed;
 
         if (animationType === 'fade') {
-            $popup.hide().fadeIn(animationSpeed); //hide and fade
+            $popup.close().fadeIn(animationSpeed); //hide and fade
         }
         else if (animationType === 'slide') {
             //move popup out of the screen and slide it in
@@ -123,12 +114,11 @@
 
             if (popupSide === 'left') {
                 $popup.css('left', -$popup.width())
-                        .animate({left:'0'}, animationSpeed);
+                        .animate({left: '0'}, animationSpeed);
             }
             else {
-                const currentLeft = $popup.css('left');
-                $popup.css('left', currentLeft + $popup.width())
-                        .animate({left:currentLeft}, animationSpeed);
+                $popup.css('right', -$popup.width())
+                        .animate({right: '0'}, animationSpeed);
             }
         }
 
@@ -150,8 +140,7 @@
                 $popup.animate({ left:-$popup.width() }, animationSpeed, completeCallback);
             }
             else {
-                const currentLeft = $popup.css('left');
-                $popup.animate({ left:currentLeft + $popup.width() }, animationSpeed, completeCallback);
+                $popup.animate({ left:-$popup.width() }, animationSpeed, completeCallback);
             }
         }
         else {
@@ -177,8 +166,7 @@
 
             //check if invoker has been set
             if (!$invokingElement || $invokingElement[0] === undefined) {
-                console.warn('getVerticalPosition: $lastInvoker is not set!');
-                return { position, top: 0 };
+                throw new Error('getVerticalPosition: $lastInvoker is not set!');
             }
             //used for centering
             const invokerBBox = $invokingElement[0].getBoundingClientRect();
@@ -204,7 +192,7 @@
     function getHorizontalPosition($popup) {
         const side = $popup[0].popupData.popupSide;
 
-        if (side == 'left') {
+        if (side === 'left') {
             return {left: 0, right: 'auto'};
         }
         else {
@@ -235,30 +223,27 @@
         //initialize events for popup
         initializeEvents($popup);
 
-
         //public function - show popup
         $popup[0].showPopup = function(invoker) {
             $popup.addClass('popup-visible');
-            $popup[0].popupData.$lastInvoker = invoker.jquery ? invoker : $(invoker);
+            $popup[0].popupData.$lastInvoker = $(invoker);
             updatePopupPosition($popup);
             animateEnter($popup);
         };
 
-        //public function - hide popup
-        $popup[0].hidePopup = function() {
+        //public function - close popup
+        $popup[0].closePopup = function() {
             animateExit($popup, function() {
                 //common part after exit animation
                 $popup.removeClass('popup-visible');
 
                 //perform custom callback
-                const customCallback = $popup[0].popupData.popupOnEnded;
-                customCallback();
+                const customCallback = $popup[0].popupData.popupOnClosed;
+                if (customCallback) {
+                    customCallback();
+                }
             });
         };
-
-        if(options.show === 'true') {
-            $popup[0].showPopup();
-        }
     }
 
     jQuery.fn.popup = function (options) {

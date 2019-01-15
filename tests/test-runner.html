@@ -10,7 +10,15 @@
 
 <body>
   <div id="qunit"></div>
-  <div id="qunit-fixture"></div>
+  <div id="qunit-fixture">
+    <div class='popup-popup' id="popup">
+      Put popup content here.<br/>
+    </div>
+    <div class='popup-popup' id="popup-dismissible">
+      Put popup content here.<br/>
+      <button class="popup-close">Close</button>
+    </div>
+  </div>
   <script src="./../node_modules/qunit/qunit/qunit.js"></script>
   <script src="./../lib/jquery.js"></script>
   <script src="./popup-transpiled.js"></script>
@@ -18,13 +26,8 @@
   <script src="test-modules/ChainabilityTests.js"></script>
   <script src="test-modules/AddingPopupDataTests.js"></script>
   <script src="test-modules/ResolvingPopupPlacementTests.js"></script>
-  <div class='popup-popup' id="popup">
-    Put popup content here.<br/>
-  </div>
-  <div class='popup-popup' id="dismissible-popup">
-    Put popup content here.<br/>
-    <button class="popup-close">Close</button>
-  </div>
+  <script src="test-modules/CallbackTests.js"></script>
+  <script src="test-modules/InteractionTests.js"></script>
 </body>
 
 </html>

@@ -3,7 +3,6 @@ QUnit.module('Plugin registration tests', function() {
     QUnit.test('Contains correct defaults', function(assert) {
         const defaults =  {
             popupSide: 'right',
-            popupOnEnded: $.noop,
             popupPlacement: 'absolute-on-item',
             popupAnimation: 'slide',
             popupAnimationSpeed: '_default'
@@ -39,7 +38,6 @@ QUnit.module('Plugin registration tests', function() {
 
         const targetCustomDefaults =  {
             popupSide: 'left',
-            popupOnEnded: $.noop,
             popupPlacement: 'absolute-on-item',
             popupAnimation: 'fade',
             popupAnimationSpeed: '_default'
