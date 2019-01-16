@@ -1,9 +1,8 @@
-/*
-    jQuery simple popup plugin
-    Wawrzyn
-*/
-
 /*jshint esversion: 6 */
+/**
+ * jQuery simple popup plugin 1.0.0
+ * by Wawrzyn
+ */
 
 (function($, window, document) {
 
