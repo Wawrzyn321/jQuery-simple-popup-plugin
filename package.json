@@ -4,7 +4,7 @@
   "description": "Simple popup plugin for jQuery",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Wawrzyn321/jQuery-simple-popup"
+    "url": "https://github.com/Wawrzyn321/jQuery-simple-popup-plugin"
   },
   "license": "MIT",
   "devDependencies": {
