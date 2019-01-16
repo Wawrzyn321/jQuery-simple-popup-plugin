@@ -83,4 +83,5 @@ function test() {
 gulp.task('lint', lint);
 gulp.task('build', build);
 gulp.task('default', watch);
+gulp.task('watch', watch);
 gulp.task('test', gulp.series(transpileJSForTesting, test));

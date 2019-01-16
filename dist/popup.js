@@ -1,3 +1,8 @@
+/*
+    jQuery simple popup plugin
+    Wawrzyn
+*/
+
 /*jshint esversion: 6 */
 
 (function($, window, document) {
