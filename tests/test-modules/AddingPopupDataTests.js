@@ -50,6 +50,19 @@ QUnit.module('Adding popup data tests', function () {
         assert.equal(popupData.popupAnimationSpeed, defaults.popupAnimationSpeed, 'Popup animation speed:');
     });
 
+    QUnit.test('Object data overrides html data', function (assert) {
+
+        const $popup = $('#popup');
+
+        $popup.data('popupPlacement', 'fixed-bottom');
+
+        $popup.popup({
+            popupPlacement: 'fixed-middle',
+        });
+
+        assert.equal($popup[0].popupData.popupPlacement, 'fixed-middle', 'Should assign "fixed-value" specified in object data');
+    });
+
     QUnit.test('Throwing error on invalid popup placement', function (assert) {
         
         //suppress console.warn during tests

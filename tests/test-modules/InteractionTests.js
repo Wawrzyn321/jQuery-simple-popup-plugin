@@ -4,54 +4,54 @@ QUnit.module('Interaction tests', function() {
         assert.expect(1);
 
         const done = assert.async(1);
-        const popup = $('#popup-dismissible');
+        const $popup = $('#popup-dismissible');
 
-        popup.popup({
+        $popup.popup({
             popupPlacement: 'fixed-middle'
         });
 
-        popup[0].showPopup(function() {
+        $popup[0].showPopup(function() {
             assert.ok(true, 'On closed callback called');
             done();
         });
-        popup.find('.popup-close').trigger('click');
+        $popup.find('.popup-close').trigger('click');
     });
 
     QUnit.test('Adding "popup-active" class on show popup', function(assert) {
-        const popup = $('#popup');
-        popup.popup({
+        const $popup = $('#popup');
+        $popup.popup({
             popupPlacement: 'fixed-bottom'
         });
         
-        popup[0].showPopup();
+        $popup[0].showPopup();
 
-        assert.ok(popup.hasClass('popup-visible'), 'Active popup have "popup-visible" class');
+        assert.ok($popup.hasClass('popup-visible'), 'Active popup have "popup-visible" class');
     });
 
     QUnit.test('Showing button on mouse over', function(assert) {
-        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
-        const popup = $('#popup');
-        popup.popup( {$anchor: anchor} );
-        anchor.on('mouseover', function() { popup[0].showPopup(); });
+        const $anchor = $('<p>A</p>').appendTo('#qunit-fixture');
+        const $popup = $('#popup');
+        $popup.popup( {$anchor: $anchor} );
+        $anchor.on('mouseover', function() { $popup[0].showPopup(); });
 
-        anchor.trigger('mouseover');
+        $anchor.trigger('mouseover');
         
-        var a = popup[0].isShown();
+        var a = $popup[0].isShown();
         assert.ok(a, 'Popup should be active and return true from isActive function');
     });
     
     QUnit.test('Closing button on mouse leave', function(assert) {
-        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
-        const popup = $('#popup');
-        popup.popup({
+        const $anchor = $('<p>A</p>').appendTo('#qunit-fixture');
+        const $popup = $('#popup');
+        $popup.popup({
             popupAnimation: 'none', //disable animations
-            $anchor: anchor
+            $anchor: $anchor
         })[0].showPopup();
-        anchor.on('mouseleave', function() { popup[0].closePopup(); });
+        $anchor.on('mouseleave', function() { $popup[0].closePopup(); });
 
-        anchor.trigger('mouseleave');
+        $anchor.trigger('mouseleave');
 
-        assert.notOk(popup[0].isShown(), 'Popup\'s isActive should return false on inactive popup');
+        assert.notOk($popup[0].isShown(), 'Popup\'s isActive should return false on inactive popup');
     });
 
 });

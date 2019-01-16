@@ -4,12 +4,12 @@ QUnit.module('Callback tests', function() {
         assert.expect(1);
         const done = assert.async(1);
 
-        const popup = $('#popup');
-        popup.popup({
+        const $popup = $('#popup');
+        $popup.popup({
             popupPlacement: 'fixed-middle'
         });
         
-        popup[0].showPopup(function() {
+        $popup[0].showPopup(function() {
             assert.ok(true, 'On show callback called');
             done();
         });
@@ -19,12 +19,12 @@ QUnit.module('Callback tests', function() {
         assert.expect(1);
         const done = assert.async(1);
 
-        const popup = $('#popup');
-        popup.popup({
+        const $popup = $('#popup');
+        $popup.popup({
             popupPlacement: 'fixed-middle'
         })[0].showPopup();
         
-        popup[0].closePopup(function() {
+        $popup[0].closePopup(function() {
             assert.ok(true, 'On close callback called');
             done();
         });

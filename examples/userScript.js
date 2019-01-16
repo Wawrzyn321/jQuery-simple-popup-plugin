@@ -26,22 +26,27 @@ function initDefinitionPopups() {
 
 function initPositionPopup(linkId, popupId) {
 
-    $(popupId).popup();
+    const $popup = $(popupId);
+    const $link = $(linkId);
 
+    //init popup
+    $popup.popup();
+
+    //bind to close button on popup
     $('.popup-close', popupId).on('click', function() {
-        $(linkId).removeClass('grid-item-active');
-        $(popupId)[0].closePopup();
+        $link.removeClass('grid-item-active');
+        $popup[0].closePopup();
     });
 
-    $(linkId).on('click', function () {
-        const $popup = $(popupId);
+    //bind to links on display
+    $link.on('click', function () {
         if ($popup[0].isShown()){
             $popup[0].closePopup();
-            $(linkId).removeClass('grid-item-active');
+            $link.removeClass('grid-item-active');
         }
         else {
             $popup[0].showPopup();
-            $(linkId).addClass('grid-item-active');
+            $link.addClass('grid-item-active');
         }
     });
 }
