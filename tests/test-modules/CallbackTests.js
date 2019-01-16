@@ -1,20 +1,33 @@
 QUnit.module('Callback tests', function() {
 
-    QUnit.test('Calling OnHidden callbacks', function(assert) {
+    QUnit.test('Calling show callback', function(assert) {
         assert.expect(1);
-
         const done = assert.async(1);
-        const invoker = $('<p>A</p>').appendTo('#qunit-fixture');
+
         const popup = $('#popup');
-
         popup.popup({
-            popupOnClosed: function() {
-                assert.ok(true, 'On closed callback called');
-                done();
-            }
+            popupPlacement: 'fixed-middle'
         });
-
-        popup[0].showPopup(invoker);
-        popup[0].closePopup();
+        
+        popup[0].showPopup(function() {
+            assert.ok(true, 'On show callback called');
+            done();
+        });
     });
+    
+    QUnit.test('Calling close callback', function(assert) {
+        assert.expect(1);
+        const done = assert.async(1);
+
+        const popup = $('#popup');
+        popup.popup({
+            popupPlacement: 'fixed-middle'
+        })[0].showPopup();
+        
+        popup[0].closePopup(function() {
+            assert.ok(true, 'On close callback called');
+            done();
+        });
+    });
+
 });

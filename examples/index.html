@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Testowanie wzora</title>
+    <title>jQuery simple popup testing</title>
     <link rel="stylesheet" href="userTheme.css">
     <link rel="stylesheet" href="./../src/popup-theme.css">
 </head>
@@ -15,7 +15,6 @@
     <main>
         <section class="main-section">
             <h1>Some title</h1>
-            <button id="popup-button">Show popup mate</button>
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam quam enim, consectetur ut mattis ac,
                 ultricies vitae nulla. Aenean maximus consectetur ex, id commodo metus. Curabitur vestibulum dui eu
@@ -31,14 +30,22 @@
                 quis molestie enim. Etiam eget turpis vitae erat semper posuere non id quam.
                 <p>
                 </p>
-                Fusce a semper diam. Aliquam erat <span class="popup-link popup-definition" data-popup-target='#first-popup'>volutpat</span>. Proin sit amet neque eget nunc maximus sollicitudin. Nulla
+                Fusce a semper diam. Aliquam erat <span class="popup-link popup-definition" data-popup-target='#first-popup'
+                    data-definition="the definition of volutpat.">volutpat</span>. Proin sit amet neque eget nunc
+                maximus sollicitudin. Nulla
                 sollicitudin vehicula aliquam. Nullam semper consectetur scelerisque. Mauris in mattis mi. Praesent
                 vestibulum odio ut lorem suscipit facilisis. Curabitur auctor metus magna, ac pharetra quam congue
                 quis. Nunc vulputate ex blandit tortor sagittis aliquam. Aliquam et bibendum massa. Nunc elementum
                 faucibus purus, eu maximus nibh vehicula ut. Ut sed nisi et massa bibendum facilisis.
-                <p>
-                </p>
-                Nam malesuada <span class="popup-link popup-definition" data-popup-target='#second-popup' >lacus</span> vel tempus euismod. Curabitur ante lorem, consectetur semper felis a, scelerisque
+                <div class="grid">
+                    <div class="grid-item" id="middle-left"></div>
+                    <div class="grid-item" id="middle-right"></div>
+                    <div class="grid-item" id="bottom-left"></div>
+                    <div class="grid-item" id="bottom-right"></div>
+                </div>
+                Nam malesuada <span class="popup-link popup-definition" data-popup-target='#first-popup'
+                    data-definition="the definition of lacus.">lacus</span>
+                vel tempus euismod. Curabitur ante lorem, consectetur semper felis a, scelerisque
                 imperdiet felis. Vestibulum a facilisis ante. Morbi a turpis velit. Nam id tempor urna. Donec et leo in
                 sem viverra tincidunt sit amet id nunc. Curabitur eleifend ac elit bibendum pulvinar. Fusce diam dui,
                 pellentesque nec lacus id, lacinia sollicitudin odio. Aenean nunc quam, convallis a purus vitae, luctus
@@ -64,7 +71,9 @@
                 <p>
                 </p>
                 Morbi interdum, nisl luctus consequat condimentum, orci metus imperdiet erat, at faucibus velit magna
-                non dolor. Aenean placerat ante ac ultrices tempus. Cras volutpat euismod pretium. Pellentesque tempus
+                non dolor. Aenean placerat ante ac ultrices tempus. Cras volutpat euismod <span class="popup-link popup-definition"
+                    data-popup-target='#first-popup' data-definition="the definition of pretium.">pretium</span>.
+                Pellentesque tempus
                 commodo mattis. Ut sit amet purus nec velit sollicitudin iaculis at sed nisl. Sed gravida eros non quam
                 iaculis, sed accumsan dolor luctus. Nam dui massa, interdum id tincidunt ut, lacinia nec mauris. Duis
                 lectus massa, tincidunt non accumsan in, rhoncus ut nisi. Pellentesque congue erat libero, et tincidunt
@@ -74,31 +83,53 @@
                 <p>
                 </p>
                 <p>
-                Sed mauris elit, tincidunt in ex nec, placerat volutpat tortor. Proin vitae nisi non urna maximus
-                molestie. Mauris efficitur massa tellus, at vehicula nibh volutpat sit amet. Ut risus quam, commodo ac
-                varius sed, eleifend vitae justo. Morbi commodo, magna vel ultricies bibendum, massa ipsum viverra
-                risus, non efficitur diam felis at sem. Cras commodo ligula ac risus pharetra faucibus. Vivamus magna
-                magna, vehicula et cursus a, fringilla vitae libero. Phasellus suscipit nisl sit amet nisl iaculis
-                mollis. Sed viverra ex a augue sollicitudin, non faucibus tortor tincidunt. Praesent dictum faucibus
-                diam at fermentum. Donec cursus, elit vitae tempus semper, odio eros pretium nisl, at tincidunt massa
-                enim rhoncus neque. Sed tempor, enim at pharetra aliquet, risus mi blandit dui, et lobortis nulla nibh
-                sed mauris. Nulla facilisi. Sed magna ex, rutrum at sollicitudin sed, pretium eu lectus. Morbi tempor
-                dui ac semper fermentum.
-            </p>
+                    Sed mauris elit, tincidunt in ex nec, placerat volutpat tortor. Proin vitae nisi non urna maximus
+                    molestie. Mauris efficitur massa tellus, at vehicula nibh volutpat sit amet. Ut risus quam, commodo
+                    ac
+                    varius sed, eleifend vitae justo. Morbi commodo, magna vel ultricies bibendum, massa ipsum viverra
+                    risus, non efficitur diam felis at sem. Cras commodo ligula ac risus pharetra faucibus. Vivamus
+                    magna
+                    magna, vehicula et cursus a, fringilla vitae libero. Phasellus suscipit nisl sit amet nisl iaculis
+                    mollis. Sed viverra ex a augue sollicitudin, non faucibus tortor tincidunt. Praesent dictum
+                    faucibus
+                    diam at fermentum. Donec cursus, elit vitae tempus semper, odio eros pretium nisl, at tincidunt
+                    massa
+                    enim rhoncus neque. Sed tempor, enim at pharetra aliquet, risus mi blandit dui, et lobortis nulla
+                    nibh
+                    sed mauris. Nulla facilisi. Sed magna ex, rutrum at sollicitudin sed, pretium eu lectus. Morbi
+                    tempor
+                    dui ac semper fermentum.
+                </p>
         </section>
     </main>
 
-        <div class='popup-popup' id="first-popup" data-popup-side='left' >
-            Put popup content here.<br/>
-        </div>
-        
-        <div class='popup-popup' id="second-popup" data-popup-placement='fixed-middle'>
-            Put popup content here.<br/>
-            <button class="popup-close">Close</button>
-        </div>
-        
-        <script src="./../node_modules/jquery/dist/jquery.js"></script>
-        <script src="./../src/popup.js"></script>
-        <script src="userScript.js"></script>
+    <div class='popup-popup' id="first-popup" data-popup-side='left'>
+        <span class="content"></span>
+    </div>
+
+    <div class='popup-popup' id="middle-left-popup" data-popup-placement='fixed-middle' data-popup-side="left">
+        <span>Put popup content here.</span><br />
+        <button class="popup-close">Close</button>
+    </div>
+    
+    <div class='popup-popup' id="middle-right-popup" data-popup-placement='fixed-middle' data-popup-side="right">
+        <span>Put popup content here.</span><br />
+        <button class="popup-close">Close</button>
+    </div>
+    
+    <div class='popup-popup' id="bottom-left-popup" data-popup-placement='fixed-bottom' data-popup-side="left">
+        <span>Put popup content here.</span><br />
+        <button class="popup-close">Close</button>
+    </div>
+    
+    <div class='popup-popup' id="bottom-right-popup" data-popup-placement='fixed-bottom' data-popup-side="right">
+        <span>Put popup content here.</span><br />
+        <button class="popup-close">Close</button>
+    </div>
+
+    <script src="./../node_modules/jquery/dist/jquery.js"></script>
+    <script src="./../src/popup.js"></script>
+    <script src="userScript.js"></script>
 </body>
+
 </html>

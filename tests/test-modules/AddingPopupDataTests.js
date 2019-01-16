@@ -7,39 +7,30 @@ QUnit.module('Adding popup data tests', function () {
         assert.ok($('#popup')[0].popupData, 'PopupData should be added to popup');
     });
 
-    QUnit.test('No invoker before invoking', function (assert) {
+    QUnit.test('Assigning anchor', function (assert) {
 
-        $('#popup').popup();
-
-        assert.equal(undefined, $('#popup')[0].popupData.lastInvoker,
-            'PopupData should contain correct last invoker');
-    });
-
-    QUnit.test('Assigning lastInvoker', function (assert) {
-
-        $('#popup').popup();
-        const invoker = $('<p data-popup-target="#popup">A</p>')
+        const anchor = $('<p data-popup-target="#popup">A</p>')
                         .appendTo('#qunit-fixture');
+        $('#popup').popup( {$anchor: anchor});
 
-        $('#popup')[0].showPopup(invoker);
+        $('#popup')[0].showPopup();
 
-        assert.equal(invoker[0], $('#popup')[0].popupData.$lastInvoker[0],
-            'PopupData should contain correct last invoker');
+        assert.equal(anchor[0], $('#popup')[0].popupData.$anchor[0],
+            'PopupData should contain correct last anchor');
     });
 
-    QUnit.test('Overriding lastInvoker', function (assert) {
+    QUnit.test('Overriding anchor', function (assert) {
 
-        $('#popup').popup();
-
-        const firstInvoker = $('<p data-popup-target="#popup">A</p>')
+        const firstAnchor = $('<p data-popup-target="#popup">A</p>')
                             .appendTo('#qunit-fixture');
-        $('#popup')[0].showPopup(firstInvoker);
-        const secondInvoker = $('<p data-popup-target="#popup">B</p>')
+        const secondAnchor = $('<p data-popup-target="#popup">B</p>')
                             .appendTo('#qunit-fixture');
-        $('#popup')[0].showPopup(secondInvoker);
 
-        assert.equal(secondInvoker[0], $('#popup')[0].popupData.$lastInvoker[0],
-            'lastInvoker in popupData should be overriden');
+        $('#popup').popup( {$anchor: firstAnchor} )[0].showPopup();
+        $('#popup').popup( {$anchor: secondAnchor} )[0].showPopup();
+
+        assert.equal(secondAnchor[0], $('#popup')[0].popupData.$anchor[0],
+            'anchor in popupData should be overriden');
     });
 
     QUnit.test('Assigning default values', function (assert) {

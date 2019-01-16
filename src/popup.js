@@ -89,24 +89,17 @@
             }
         }
 
-        $popup[0].popupData = $.extend(options, placement);
-    }
-
-    //initialize single popup events
-    function initializeEvents($popup) {
-        $popup.on('click', '.popup-close', function (e) {
-            $popup[0].closePopup();
-        });
+        $popup[0].popupData = $.extend(placement, options);
     }
 
     //popup enter animation
     //animation starts with already visible popup
-    function animateEnter($popup) {
+    function animateEnter($popup, callback) {
         const animationType = $popup[0].popupData.popupAnimation;
         const animationSpeed = $popup[0].popupData.popupAnimationSpeed;
 
         if (animationType === 'fade') {
-            $popup.close().fadeIn(animationSpeed); //hide and fade
+            $popup.close().fadeIn(animationSpeed, callback); //hide and fade
         }
         else if (animationType === 'slide') {
             //move popup out of the screen and slide it in
@@ -114,46 +107,48 @@
 
             if (popupSide === 'left') {
                 $popup.css('left', -$popup.width())
-                        .animate({left: '0'}, animationSpeed);
+                        .animate({left: '0'}, animationSpeed, callback);
             }
             else {
                 $popup.css('right', -$popup.width())
-                        .animate({right: '0'}, animationSpeed);
+                        .animate({right: '0'}, animationSpeed, callback);
             }
         }
-
         //do nothing if animation type is 'none' as popup is already visible
+        else {
+            if(callback) {
+                callback();
+            }
+        }
     }
     
     //popup exit animation
-    function animateExit($popup, completeCallback) {
+    function animateExit($popup, animationCompletedCallback) {
         const animationType = $popup[0].popupData.popupAnimation;
         const animationSpeed = $popup[0].popupData.popupAnimationSpeed;
 
         if (animationType === 'fade') {
-            $popup.fadeOut(animationSpeed, completeCallback);
+            $popup.fadeOut(animationSpeed, animationCompletedCallback);
         }
         else if (animationType === 'slide') {
             const popupSide = $popup[0].popupData.popupSide;
 
             if (popupSide === 'left') {
-                $popup.animate({ left:-$popup.width() }, animationSpeed, completeCallback);
+                $popup.animate({ left:-$popup.width() }, animationSpeed, animationCompletedCallback);
             }
             else {
-                $popup.animate({ left:-$popup.width() }, animationSpeed, completeCallback);
+                $popup.animate({ right:-$popup.width() }, animationSpeed, animationCompletedCallback);
             }
         }
         else {
-            //completeCallback takes care with actual deactivating the popup
-            completeCallback();
+            animationCompletedCallback();
         }
-        
     }
 
     //return a pair of CSS position value (fixed or absolute) and top coordinate
     function getVerticalPosition ($popup) {
         const position = $popup[0].popupData.position;
-        const placementMode = $popup[0].popupData.popupPlacement;
+        const placementMode = $popup[0].popupData.placementMode;
 
         const popupHeight = $popup.outerHeight(true);
         const scrollAmount = $(window).scrollTop();
@@ -162,18 +157,19 @@
         if (position === 'absolute') {
             /*on-item*/
 
-            const $invokingElement = $popup[0].popupData.$lastInvoker;
+            const $anchor = $popup[0].popupData.$anchor;
 
-            //check if invoker has been set
-            if (!$invokingElement || $invokingElement[0] === undefined) {
-                throw new Error('getVerticalPosition: $lastInvoker is not set!');
+            //check if anchor has been set
+            if (!$anchor || $anchor[0] === undefined) {
+                throw new Error('getVerticalPosition: $anchor is not set!');
             }
-            //used for centering
-            const invokerBBox = $invokingElement[0].getBoundingClientRect();
-            const invokerHeight = invokerBBox.height;
-            const invokerY = invokerBBox.y;
 
-            const top = scrollAmount + invokerY + invokerHeight / 2 - popupHeight / 2;
+            //variables used for centering
+            const anchorBBox = $anchor[0].getBoundingClientRect();
+            const anchorHeight = anchorBBox.height;
+            const anchorY = anchorBBox.y;
+
+            const top = scrollAmount + anchorY + anchorHeight / 2 - popupHeight / 2;
             return { position, top };
         }
         else {
@@ -220,27 +216,30 @@
         //bind popup data to popup
         assignPopupData($popup, options);
 
-        //initialize events for popup
-        initializeEvents($popup);
-
         //public function - show popup
-        $popup[0].showPopup = function(invoker) {
+        $popup[0].showPopup = function(callback) {
+            if ($popup[0].isShown()){
+                return;
+            }
+
             $popup.addClass('popup-visible');
-            $popup[0].popupData.$lastInvoker = $(invoker);
             updatePopupPosition($popup);
-            animateEnter($popup);
+            animateEnter($popup, callback);
         };
 
         //public function - close popup
-        $popup[0].closePopup = function() {
+        $popup[0].closePopup = function(callback) {
+            if ($popup[0].isShown() === false){
+                return;
+            }
+
             animateExit($popup, function() {
-                //common part after exit animation
+                //actually remove active class after animations finished
                 $popup.removeClass('popup-visible');
 
                 //perform custom callback
-                const customCallback = $popup[0].popupData.popupOnClosed;
-                if (customCallback) {
-                    customCallback();
+                if (callback) {
+                    callback();
                 }
             });
         };

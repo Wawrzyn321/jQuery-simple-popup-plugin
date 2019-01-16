@@ -3,11 +3,12 @@ QUnit.module('Resolving popup placement tests', function () {
     QUnit.test('Resolving popupSide: left', function (assert) {
 
         const popup = $('#popup');
-        const invoker = $('<p>A</p>').appendTo('#qunit-fixture');
+        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
         popup.popup({
             popupSide: 'left',
-            popupAnimation: 'none'
-        })[0].showPopup(invoker);
+            popupAnimation: 'none',
+            $anchor: anchor
+        })[0].showPopup();
 
         const side = popup[0].popupData.popupSide;
         assert.equal(side, 'left', 'PopupSide should be set to left');
@@ -25,12 +26,13 @@ QUnit.module('Resolving popup placement tests', function () {
     QUnit.test('Resolving popupSide: right', function (assert) {
 
         const popup = $('#popup');
-        const invoker = $('<p>A</p>').appendTo('#qunit-fixture');
+        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
 
         popup.popup({
             popupSide: 'right',
-            popupAnimation: 'none'
-        })[0].showPopup(invoker);
+            popupAnimation: 'none',
+            $anchor: anchor
+        })[0].showPopup();
 
         //check only on phantomjs, because browsers tend to return pixel value instead of 'auto'
         if (window._phantom) {
@@ -44,12 +46,13 @@ QUnit.module('Resolving popup placement tests', function () {
     QUnit.test('Resolving popupPlacement: absolute-on-item', function (assert) {
 
         const popup = $('#popup');
-        const invoker = $('<p>A</p>').appendTo('#qunit-fixture');
+        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
 
         popup.popup({
             popupPlacement: 'absolute-on-item',
-            popupAnimation: 'none' //skip animation
-        })[0].showPopup(invoker);
+            popupAnimation: 'none', //skip animation
+            $anchor: anchor
+        })[0].showPopup();
 
         const position = popup.css('position');
         assert.equal(position, 'absolute', 'On placement "absolute-on-item", position should be absolute');
@@ -58,12 +61,13 @@ QUnit.module('Resolving popup placement tests', function () {
     QUnit.test('Resolving popupPlacement: fixed-bottom', function (assert) {
 
         const popup = $('#popup');
-        const invoker = $('<p>A</p>').appendTo('#qunit-fixture');
+        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
 
         popup.popup({
             popupPlacement: 'fixed-bottom',
-            popupAnimation: 'none' //skip animation
-        })[0].showPopup(invoker);
+            popupAnimation: 'none', //skip animation
+            $anchor: anchor
+        })[0].showPopup();
 
         const position = popup.css('position');
         assert.equal(position, 'fixed', 'On placement "fixed-bottom", position should be absolute');
@@ -72,12 +76,13 @@ QUnit.module('Resolving popup placement tests', function () {
     QUnit.test('Resolving popupPlacement: fixed-middle', function (assert) {
 
         const popup = $('#popup');
-        const invoker = $('<p>A</p>').appendTo('#qunit-fixture');
+        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
 
         popup.popup({
             popupPlacement: 'fixed-middle',
-            popupAnimation: 'none' //skip animation
-        })[0].showPopup(invoker);
+            popupAnimation: 'none',
+            $anchor: anchor //skip animation
+        })[0].showPopup();
 
         const position = popup.css('position');
         assert.equal(position, 'fixed', 'On placement "fixed-middle", position should be absolute');
@@ -86,23 +91,24 @@ QUnit.module('Resolving popup placement tests', function () {
     QUnit.test('Resolving popupPlacement: default', function (assert) {
 
         const popup = $('#popup');
-        const invoker = $('<p>A</p>').appendTo('#qunit-fixture');
+        const anchor = $('<p>A</p>').appendTo('#qunit-fixture');
 
         popup.popup({
-            popupAnimation: 'none' //skip animation
-        })[0].showPopup(invoker);
+            popupAnimation: 'none', //skip animation
+            $anchor: anchor
+        })[0].showPopup();
 
         const position = popup.css('position');
         assert.equal(position, 'absolute', 'With no placement given, position should be absolute-on-item');
     });
 
-    QUnit.test('Throwing on no invoker', function (assert) {
+    QUnit.test('Throwing on no anchor', function (assert) {
 
         const popup = $('#popup');
         popup.popup();
 
         const act = function() { popup[0].showPopup(); };
 
-        assert.throws(act, Error('getVerticalPosition: $lastInvoker is not set!'), 'getVerticalPosition should throw when invoker is not specified')
+        assert.throws(act, Error('getVerticalPosition: $anchor is not set!'), 'getVerticalPosition should throw when anchor is not specified')
     });
 });
