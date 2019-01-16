@@ -17,7 +17,7 @@ QUnit.module('Interaction tests', function() {
         $popup.find('.popup-close').trigger('click');
     });
 
-    QUnit.test('Adding "popup-active" class on show popup', function(assert) {
+    QUnit.test('Adding "popup-visible" class on show popup', function(assert) {
         const $popup = $('#popup');
         $popup.popup({
             popupPlacement: 'fixed-bottom'
@@ -36,8 +36,7 @@ QUnit.module('Interaction tests', function() {
 
         $anchor.trigger('mouseover');
         
-        var a = $popup[0].isShown();
-        assert.ok(a, 'Popup should be active and return true from isActive function');
+        assert.ok($popup[0].isShown(), 'Popup should be active and return true from isActive function');
     });
     
     QUnit.test('Closing button on mouse leave', function(assert) {

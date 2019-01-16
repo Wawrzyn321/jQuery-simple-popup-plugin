@@ -65,7 +65,6 @@ QUnit.module('Resolving popup placement tests', function () {
 
         $popup.popup({
             popupPlacement: 'fixed-bottom',
-            popupAnimation: 'none', //skip animation
             $anchor: $anchor
         })[0].showPopup();
 
@@ -80,8 +79,7 @@ QUnit.module('Resolving popup placement tests', function () {
 
         $popup.popup({
             popupPlacement: 'fixed-middle',
-            popupAnimation: 'none',
-            $anchor: $anchor //skip animation
+            $anchor: $anchor
         })[0].showPopup();
 
         const position = $popup.css('position');
@@ -94,7 +92,6 @@ QUnit.module('Resolving popup placement tests', function () {
         const $anchor = $('<p>A</p>').appendTo('#qunit-fixture');
 
         $popup.popup({
-            popupAnimation: 'none', //skip animation
             $anchor: $anchor
         })[0].showPopup();
 
@@ -105,6 +102,7 @@ QUnit.module('Resolving popup placement tests', function () {
     QUnit.test('Throwing on no anchor', function (assert) {
         $('#popup').popup();
 
+        //show popup (absolute-on-item) without specyfing the anchor
         const act = function() { $('#popup')[0].showPopup(); };
 
         assert.throws(act, Error('getVerticalPosition: $anchor is not set!'), 'getVerticalPosition should throw when anchor is not specified')

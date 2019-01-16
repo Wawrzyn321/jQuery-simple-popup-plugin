@@ -13,6 +13,14 @@
     font-weight: bolder;
 }
 
+.popup-link {
+    color: black;
+}
+
+p {
+    color: #333;
+}
+
 .grid {
     display: grid;
     grid-template-rows: repeat(2, 20px);
