@@ -15,7 +15,13 @@
             sides: ['right', 'left'],
             placements: ['absolute-on-item', 'fixed-bottom', 'fixed-middle'],
             animations: ['slide', 'fade', 'none'],
-            animationSpeeds: jQuery.fx ? jQuery.fx.speeds : ['_default', 'slow', 'fast']
+            //add defaults in case $.fx is not defined
+            animationSpeeds: jQuery.fx ? jQuery.fx.speeds :
+            {
+                '_default': 400, 
+                'fast': 200,
+                'slow': 600 
+            }
         },
 
         //default values

@@ -22,7 +22,9 @@ In HTML
 In JS
 ```javascript
 var popup = $('#my-popup').popup();
-popup.popup();
+popup.popup( {
+    popupPlacement: 'fixed-middle'
+});
 popup[0].show();
 ```
 
